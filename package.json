@@ -6,11 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "docker:build": "docker build -t friend-lines-app .",
-    "docker:run": "docker run -p 3005:3005 --name friend-lines-server friend-lines-app",
-    "docker:compose:up": "docker-compose up -d",
-    "docker:compose:down": "docker-compose down",
-    "docker:compose:logs": "docker-compose logs -f",
     "gcp:deploy": "./gcp-deploy.sh",
     "gcp:setup": "gcloud auth login && gcloud auth application-default login",
     "gcp:logs": "gcloud logs tail --service=friend-lines-app",

@@ -54,11 +54,6 @@ Thumbs.db
 .git/
 .gitignore
 
-# Docker
-Dockerfile
-docker-compose.yml
-.dockerignore
-
 # Documentation
 docs/
 *.md
@@ -66,4 +61,3 @@ README.md
 
 # Local deployment scripts
 gcp-deploy.sh
-deploy.sh
