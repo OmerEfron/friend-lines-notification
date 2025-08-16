@@ -27,8 +27,11 @@ gcloud auth application-default login
 
 #### Create a new project (or use existing)
 ```bash
+# Option 1: Create a new project
 gcloud projects create friend-lines-app-$(date +%s) --name="Friend Lines App"
-gcloud config set project YOUR_PROJECT_ID
+
+# Option 2: Use existing project (recommended for this setup)
+gcloud config set project rational-diode-469219-n9
 ```
 
 #### Enable billing (required for Cloud Run)
@@ -65,7 +68,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 chmod +x gcp-deploy.sh
 
 # Set environment variables
-export GCP_PROJECT_ID="your-project-id"
+export GCP_PROJECT_ID="rational-diode-469219-n9"
 export GCP_REGION="us-central1"
 
 # Run deployment
