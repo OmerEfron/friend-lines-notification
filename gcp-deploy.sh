@@ -36,6 +36,19 @@ gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
 gcloud services enable containerregistry.googleapis.com
 
+# Grant Cloud Build service account necessary permissions
+echo "🔐 Setting up Cloud Build permissions..."
+PROJECT_ID=$(gcloud config get-value project)
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/storage.admin" --quiet || true
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/run.admin" --quiet || true
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountUser" --quiet || true
+
 # Build and push the Docker image
 echo "🐳 Building and pushing Docker image..."
 gcloud builds submit --tag $IMAGE_NAME .

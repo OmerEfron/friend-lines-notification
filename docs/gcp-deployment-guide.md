@@ -36,6 +36,27 @@ gcloud config set project YOUR_PROJECT_ID
 - Select your project
 - Enable billing (free tier gives you $300 credit for 90 days)
 
+#### Set up Cloud Build permissions (IMPORTANT!)
+```bash
+# Get your project ID
+PROJECT_ID=$(gcloud config get-value project)
+
+# Grant Cloud Build service account the necessary roles
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/storage.admin"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/run.admin"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$PROJECT_ID@cloudbuild.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountUser"
+```
+
+**Note**: These permissions are required for Cloud Build to access Google Cloud Storage and deploy to Cloud Run. Without them, you'll get permission errors during deployment.
+
 ### 3. Deploy Manually
 
 #### Option A: Using the deployment script
@@ -133,9 +154,10 @@ The app automatically uses these environment variables:
 
 #### Common Issues:
 1. **Permission denied**: Ensure service account has proper roles
-2. **Build fails**: Check Dockerfile and dependencies
-3. **Service won't start**: Check logs and environment variables
-4. **Billing not enabled**: Required for Cloud Run
+2. **Storage access denied**: Run the Cloud Build permission setup commands above
+3. **Build fails**: Check Dockerfile and dependencies
+4. **Service won't start**: Check logs and environment variables
+5. **Billing not enabled**: Required for Cloud Run
 
 #### Useful Commands:
 ```bash
