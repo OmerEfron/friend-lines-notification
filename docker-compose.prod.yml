@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  friend-lines-app:
+    build: .
+    container_name: friend-lines-server-prod
+    ports:
+      - "80:3005"      # HTTP (port 80)
+      - "443:3005"     # HTTPS (port 443)
+      - "3005:3005"    # Direct access
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - HOST=0.0.0.0   # Bind to all interfaces
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3005/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - friend-lines-network
+    # Security: bind to specific network interface if needed
+    # network_mode: "host"  # Uncomment for host networking
+
+networks:
+  friend-lines-network:
+    driver: bridge
+    # For external access, you might want to use host networking
+    # driver: host
